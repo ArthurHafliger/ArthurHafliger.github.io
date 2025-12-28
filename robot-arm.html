@@ -27,7 +27,16 @@ This project implements real-time cartesian control of a 3-DOF robotic arm using
   <li>Singularity detection using principles derived from singular value decomposition</li>
   <li>Singularity avoidance using positional awareness and motion redirection</li>
 </ul>
+<h2>Motivation and Problem Statement</h2>
+<p>
+How can I design and program a robotic arm that uses rotational joints but is controlled in the direction of any desired vector in R^3?
+My intent for this project was to learn more about control systems and the practical applications of the classes I had just completed my previous semester, these being Multivariable calculus, statics, Linear algebra, and intro to C.
+For this project I constrained myself to using an Arduino, two 9g servos, and a stepper motor. These specifications gave me the minimum number of joints such that my projectspace could span R^3 while also avoiding the problem of redundancy and null space optimization.
+The electronic components themselves forced me to think about the value of lengthy computations and the price of significant figures. An arduino while being powerful enough to use real mathematics would force me to consider its limits.
+My servos could only rotate in integer quantities making it a critical weakpoint in tracking accuracy and no doubt something I seek to improve in further iterations of this project.
+</p>
 
+  
 <h2>Demo Video</h2>
 <video width="640" controls>
   <source src="assets/videos/robot-demo.mp4" type="video/mp4">
