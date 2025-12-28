@@ -15,15 +15,17 @@
 
 <h2>Overview</h2>
 <p>
-This project implements real-time control of a 3-DOF robotic arm using
-inverse kinematics and Jacobian-based velocity control on embedded hardware.
+This project implements real-time cartesian control of a 3-DOF robotic arm using a Jacobian based inverse kinematics "solver", PID controls for cartesian commands, and a singularity detection/avoidance system.
 </p>
 
 <h2>System Design</h2>
 <ul>
   <li>Forward and inverse kinematics</li>
   <li>Jacobian matrix and damped least squares</li>
-  <li>PID control with variable time step</li>
+  <li>Workspace-based controls rather than jointspace-based controls</li>
+  <li>PID control for workspace commands with variable time step</li>
+  <li>Singularity detection using principles derived from singular value decomposition</li>
+  <li>Singularity avoidance using positional awareness and motion redirection</li>
 </ul>
 
 <h2>Demo Video</h2>
