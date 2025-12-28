@@ -1,1 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Robotic Arm Control</title>
+</head>
+<body>
 
+<nav>
+  <a href="index.html">Home</a>
+  <a href="projects.html">Projects</a>
+</nav>
+
+<h1>Robotic Arm Control System</h1>
+
+<h2>Overview</h2>
+<p>
+This project implements real-time control of a 3-DOF robotic arm using
+inverse kinematics and Jacobian-based velocity control on embedded hardware.
+</p>
+
+<h2>System Design</h2>
+<ul>
+  <li>Forward and inverse kinematics</li>
+  <li>Jacobian matrix and damped least squares</li>
+  <li>PID control with variable time step</li>
+</ul>
+
+<h2>Demo Video</h2>
+<video width="640" controls>
+  <source src="assets/videos/robot-demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<h2>What Went Wrong</h2>
+<p>
+Instability occurred near joint limits and Jacobian singularities,
+requiring damping and timing corrections.
+</p>
+
+</body>
+</html>
