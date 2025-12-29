@@ -96,11 +96,18 @@ modified at the distal end to include a pointer used for visually verifying the 
     inconsistent solution and finds the best approximating vector. In research for this project I found that this least squares solution was often paired with a damping constant. The relevance of this constant
     is more clear in the discussion of singularities.
     ---
-  Singularity Detection and Solutions
+  Singularity Detection
     A singularity is a point at which there is no direction of movement available, more formally, when the determinant of the Jacobian Matrix is zero. Such a state can be reached when one or more angles reaches its
     maximum, The end effector touches the origin, and other geometric situations depending on degrees of freedom and link geometry. While it is possible avoid these issues by simply avoiding these geometries, a
     more formal approach comes from singular value decomposition. This method of matrix factorization effectively divides a matrix into 3 sub matrices, two of which describe transformations and one that descirbes the strength
-    of these transformations. This "strength" matrix is composed of the singular values of the factored matrix. Finding when the singular values are tiny directly correlates to when a singularity is near.
+    of these transformations. This "strength" matrix is composed of the singular values of the factored matrix. Finding when the singular values are tiny directly correlates to when a singularity is near. To compute the full singular
+    value decomposition at each position would be extremely computationally demanding, a solution to this is to use power iteration. Put into words, if you multiply a matrix by an arbitrary vector and normalize the resulting vector
+    then multiply that vector by the matrix again and complete the cycle infinite times, the largest eigenvector of that matrix reveals itself. But since we are interested in the smallest eigenvector we can instead solve the matrix
+    with an arbitrary vector via row reduction or cramers rule. With the smallest eigenvector found, we can extract the eigenvalue and take the square root to find the singular value. From here it is a matter of tuning values specific
+    to the robot and finding the threshold where a singularity exists.
+    ---
+  Singularity Avoidance
+    
     
     
   
