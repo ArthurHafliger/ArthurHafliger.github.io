@@ -48,17 +48,24 @@ These limitations highlighted the tradeoffs between theoretical control design a
 <p>
 Mechanical System-
   The body of my robot was built from PETG filament out of pieces designed and manufactured by myself. I decided to use a 3d printer for the manufacturing of this project so that
-  I could take advantage of my prior experience in SolidWorks to design pieces exactly the way I wanted them. As for filament choice, price constraints forced me to choose between PLA and PETG, I chose
-  PETG due to its lower rigidity and higher flexibility. For this project I wanted to create the arm so that it could support weight if I ever expanded the scope such that it would be required, therefore 
-  PETG was preferrable.
+  I could leverage prior experience with SolidWorks and have better control over motor mounts, joint interfaces and general link geometry. As for filament choice, price constraints forced 
+  me to choose between PLA and PETG, I chose PETG due to its higher toughness and resistance to brittle failure. While PLA granted higher stiffness, PETGs increased ductility made it 
+  preferrable to a system that could experience repeated loadingand future payload expansion.
 Electronics and Hardware-
-  The Microcontroller I chose for this project was an Arduino Uno. I chose to use an Arduino because of its wide range of libraries and general ease of use. The electronic components
-  I chose were constrained entirely by what was included in my Arduino Starter kit, therefore I used two of the SG90 Servo motors and one 28BYJ-48 stepper motor. For my wiring I used
-  a Solderless breadboard for its impermanence and general ease of tinkering.
+  The control hardware consists of an Arduino Uno microcontroller, two SG90 hobby servos, and a 28BYJ-48 stepper motor. Component selection was constrained by the contents of the electronic starter kit I had
+  purchased, intentionally prioritizing accessibility and cost over performance. This constraint forced the control system to operate under limited positional resolution, torque output, and computational capacity,
+  making it well-suited for studying the practical limitations of embedded control systems. A solderless breadboard was used to facilitate rapid iteration and debugging during development.
 Software Architecture-
-  Programming this robot came in many iterations but the general flow was Initialize joint positions, compute forward kinematics, accept a user input (direction vector), plug this direction into PID controls to account for error,
-  Compute inverse kinematics via damped least squares jacobian, Look for singularities, move joints to computed final positions. The intent of the program flow was to keep each block as independent from its neighboring blocks
-  as possible so as to ensure clarity and ease of testing, for instance, this program was built to be tested without hardware to test on.
+  The software was developed iteratively, with an emphasis on modularity and testability. At a high level, the control loop follows this sequence:
+    Initialize joint states and system parameters,
+    Compute forward kinematics,
+    Accept a user-defined direction vector in task space,
+    Apply PID control in Cartesian space to reduce positional error,
+    Compute joint updates using a damped least-squares Jacobian-based inverse kinematics solver,
+    Detect proximity to kinematic singularities,
+    Command joint actuators to the updated positions,
+Each functional block was designed to be as independent as possible, allowing individual components to be tested in isolation. This architecture enabled debugging and validation of the kinematic and control
+logic without requiring the physical hardware to be connected.
 </p>
 <h2>Mechanical Design</h2>
 <p>
