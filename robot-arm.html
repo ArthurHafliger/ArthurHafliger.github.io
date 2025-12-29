@@ -75,7 +75,22 @@ was set to 200 mm but was reduced to approximately 80 mm after preliminary testi
 and includes an integrated bracket to house the second servo, enabling rotational motion between the two links. Link 2 was derived from the first link’s geometry but 
 modified at the distal end to include a pointer used for visually verifying the estimated end-effector position.
 </p>
-
+<h2>Mathmematics/Kinematics</h2>
+<p>
+  Forward Kinematics Approach
+    Formulating forward kinematic equations was done by solving for each cartesian coordinate with respect to the 3 angles of the robot. Below is a derivation of
+    the position vector with respect to angles b,a1, and a2.
+    -----
+  Inverse Kinematics Approach
+    Inverse Kinematics for this project was made in many iterations. First testing the method of trigonometry, using the robots specific geometry to create an equation
+    that could handle a cartesian command but could only handle a unit vector. 
+    ---
+    Using properties of Multivariable Calculus and Linear Algebra, I learned and implemented a Jacobian based IK solver. The strength of this method lies in its application
+    to all robotic systems. Aside from the mathematical derivation, this method works by "zooming in" to the end effector position and forcing its curved trajectory to appear straight
+    (local linearization) and using a matrix equation to transform a change in position vector into a change in angles vector.
+    ---
+  
+</p>
   
 <h2>Demo Video</h2>
 <video width="640" controls>
