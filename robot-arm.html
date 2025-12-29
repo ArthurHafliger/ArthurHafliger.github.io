@@ -121,8 +121,15 @@ modified at the distal end to include a pointer used for visually verifying the 
   actuators, the integral term did not serve much of a purpose as there was no steady state bias like gravity or friction that could be fought. Because the nature of the robot is that of a learning experience I do not 
   consider the drawbacks listed here enough to overrule the value of learning them, In future renditions of this project PID controls will play a larger role. Hobby servos heavily restrict robustness of controls due to quantization but
   the strength of the robots control logic can be observed when testing without hardware.
+</p>
+<h2>Software Implementation</h2>
+<p>
+  The program language used for this robot is Arduino and runs off of Arduino IDE. Arduino is a convenient choice because of its similarity to C of which I completed a course on the previous semester.
+  To save computational demand I used several libraries. The Servo.h library allowed for servos to be more easily controlled. The math.h library allowed the use of operations such as square root and
+  trigonometric functions, the former being critical for calculating magnitudes and the latter being necessary for computing the kinematics. This robot also uses BasicLinearAlgebra.h, allowing for matrices
+  to be a data type, this made it more convenient to deal with matrix operations. All of the libraries utilized could have been worked around but would have tilted the focus of the project into a different
+  direction.
 
-  
 </p>
   
 <h2>Demo Video</h2>
