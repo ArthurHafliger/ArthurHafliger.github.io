@@ -109,9 +109,18 @@ modified at the distal end to include a pointer used for visually verifying the 
   Singularity Avoidance
     With a mathematically sound detection system, avoidance can be broken down into two techniques. Should the robot be approaching the singularity that exists on the edge of the sphere drawn by the workspace, the robot identifies this
     by checking the magnitude of the position vector the end effector occupies and reverses the desired direction vector. Should the robot be approaching the singularity at the center of the workspace, the robot identifies this in the
-    same manner but instead redirects motion tangentially by taking the cross product of the direction vector and a K unit vector.
-    
-    
+    same manner but instead redirects motion tangentially by taking the cross product of the direction vector and a K unit vector. In general task space the robot also uses its proximity to singularities to tune its controls. As alluded to
+    earlier, the purpose of damped least squares is to add a damping coefficient when inverting the Jacobian becomes more unstable. This does in some manner harm the mathematical honesty of the jacobian but the benefit of smoothing near
+    riskier positions is far more preferrable than the robot moving wildly out of control when approaching an unreachable zone.
+  
+</p>
+<h2>Control Strategy</h2>
+<p>
+  The defining control choice for this robot was to use cartesian space controls. Cartesian space controls were chosen to more closesly mimmic a robot in industry and to provide room for more mathematical rigor.
+  Velocity based controls are used also to better mimmic industry and provide a reason to learn how to use PID controls. The derivative term functions similarly as the damping coefficient mentioned above, and due to the nature of my
+  actuators, the integral term did not serve much of a purpose as there was no steady state bias like gravity or friction that could be fought. Because the nature of the robot is that of a learning experience I do not 
+  consider the drawbacks listed here enough to overrule the value of learning them, In future renditions of this project PID controls will play a larger role.
+
   
 </p>
   
