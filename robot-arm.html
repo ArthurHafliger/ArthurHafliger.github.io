@@ -119,7 +119,8 @@ modified at the distal end to include a pointer used for visually verifying the 
   The defining control choice for this robot was to use cartesian space controls. Cartesian space controls were chosen to more closesly mimmic a robot in industry and to provide room for more mathematical rigor.
   Velocity based controls are used also to better mimmic industry and provide a reason to learn how to use PID controls. The derivative term functions similarly as the damping coefficient mentioned above, and due to the nature of my
   actuators, the integral term did not serve much of a purpose as there was no steady state bias like gravity or friction that could be fought. Because the nature of the robot is that of a learning experience I do not 
-  consider the drawbacks listed here enough to overrule the value of learning them, In future renditions of this project PID controls will play a larger role.
+  consider the drawbacks listed here enough to overrule the value of learning them, In future renditions of this project PID controls will play a larger role. Hobby servos heavily restrict robustness of controls due to quantization but
+  the strength of the robots control logic can be observed when testing without hardware.
 
   
 </p>
