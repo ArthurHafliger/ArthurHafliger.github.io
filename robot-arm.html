@@ -107,7 +107,9 @@ modified at the distal end to include a pointer used for visually verifying the 
     to the robot and finding the threshold where a singularity exists.
     ---
   Singularity Avoidance
-    
+    With a mathematically sound detection system, avoidance can be broken down into two techniques. Should the robot be approaching the singularity that exists on the edge of the sphere drawn by the workspace, the robot identifies this
+    by checking the magnitude of the position vector the end effector occupies and reverses the desired direction vector. Should the robot be approaching the singularity at the center of the workspace, the robot identifies this in the
+    same manner but instead redirects motion tangentially by taking the cross product of the direction vector and a K unit vector.
     
     
   
