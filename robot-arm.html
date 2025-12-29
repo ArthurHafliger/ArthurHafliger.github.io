@@ -89,6 +89,20 @@ modified at the distal end to include a pointer used for visually verifying the 
     to all robotic systems. Aside from the mathematical derivation, this method works by "zooming in" to the end effector position and forcing its curved trajectory to appear straight
     (local linearization) and using a matrix equation to transform a change in position vector into a change in angles vector.
     ---
+  Jacobian Formulation and Solution Approach
+    In the case of this 3 DOF robotic arm the Jacobian matrix is not redundant. As previously mentioned, the nullspace of the Jacobian was not something this bot would ever have to consider.
+    Solving the previously mentioned Matrix equation could have been done by method of Cramers Rule or by row reduction method because the Jacobian is invertible, this is only because of non-redundancy.
+    To accomodate for further expansion in DOFs and to find an approach more similar to industry, This robot solves the matrix equation as a least squares problem. The least squares problem assumes an 
+    inconsistent solution and finds the best approximating vector. In research for this project I found that this least squares solution was often paired with a damping constant. The relevance of this constant
+    is more clear in the discussion of singularities.
+    ---
+  Singularity Detection and Solutions
+    A singularity is a point at which there is no direction of movement available, more formally, when the determinant of the Jacobian Matrix is zero. Such a state can be reached when one or more angles reaches its
+    maximum, The end effector touches the origin, and other geometric situations depending on degrees of freedom and link geometry. While it is possible avoid these issues by simply avoiding these geometries, a
+    more formal approach comes from singular value decomposition. This method of matrix factorization effectively divides a matrix into 3 sub matrices, two of which describe transformations and one that descirbes the strength
+    of these transformations. This "strength" matrix is composed of the singular values of the factored matrix. Finding when the singular values are tiny directly correlates to when a singularity is near.
+    
+    
   
 </p>
   
