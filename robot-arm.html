@@ -35,6 +35,28 @@ For this project I constrained myself to using an Arduino, two 9g servos, and a 
 The electronic components themselves forced me to think about the value of lengthy computations and the price of significant figures. An arduino while being powerful enough to use real mathematics would force me to consider its limits.
 My servos could only rotate in integer quantities making it a critical weakpoint in tracking accuracy and no doubt something I seek to improve in further iterations of this project.
 </p>
+<h2>System Architecture Overview</h2>
+<p>
+Mechanical System-
+  The body of my robot was built from PETG filament out of pieces designed and manufactured by myself. I decided to use a 3d printer for the manufacturing of this project so that
+  I could take advantage of my prior experience in SolidWorks to design pieces exactly the way I wanted them. As for filament choice, price constraints forced me to choose between PLA and PETG, I chose
+  PETG due to its lower rigidity and higher flexibility. For this project I wanted to create the arm so that it could support weight if I ever expanded the scope such that it would be required, therefore 
+  PETG was preferrable.
+Electronics and Hardware-
+  The Microcontroller I chose for this project was an Arduino Uno. I chose to use an Arduino because of its wide range of libraries and general ease of use. The electronic components
+  I chose were constrained entirely by what was included in my Arduino Starter kit, therefore I used two of the SG90 Servo motors and one 28BYJ-48 stepper motor. For my wiring I used
+  a Solderless breadboard for its impermanence and general ease of tinkering.
+Software Architecture-
+  Programming this robot came in many iterations but the general flow was Initialize joint positions, compute forward kinematics, accept a user input (direction vector), plug this direction into PID controls to account for error,
+  Compute inverse kinematics via damped least squares jacobian, Look for singularities, move joints to computed final positions. The intent of the program flow was to keep each block as independent from its neighboring blocks
+  as possible so as to ensure clarity and ease of testing, for instance, this program was built to be tested without hardware to test on.
+</p>
+<h2>Mechanical Design</h2>
+<p>
+  My robotic arm assembly consisted of 3 simple pieces. The base was built with 3 legs to ensure stability and measurements to ensure the stepper motor could feed through it. The two links were designed largely in tandem and begun with a length of 200mm
+  this was almost immediately shortened dramatically to 80mm due to torque constraints. Link 1 was designed to fit on top of a servo with a servo horn already attached, link 1 also features a bracket designed to house another servo. link 2 was derived from 1,
+  differing in its end where a pointer sits to accurately reflect where the robot thinks the end effector is.
+</p>
 
   
 <h2>Demo Video</h2>
