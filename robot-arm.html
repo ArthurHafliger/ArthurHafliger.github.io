@@ -29,11 +29,20 @@ This project implements real-time cartesian control of a 3-DOF robotic arm using
 </ul>
 <h2>Motivation and Problem Statement</h2>
 <p>
-How can I design and program a robotic arm that uses rotational joints but is controlled in the direction of any desired vector in R^3?
-My intent for this project was to learn more about control systems and the practical applications of the classes I had just completed my previous semester, these being Multivariable calculus, statics, Linear algebra, and intro to C.
-For this project I constrained myself to using an Arduino, two 9g servos, and a stepper motor. These specifications gave me the minimum number of joints such that my projectspace could span R^3 while also avoiding the problem of redundancy and null space optimization.
-The electronic components themselves forced me to think about the value of lengthy computations and the price of significant figures. An arduino while being powerful enough to use real mathematics would force me to consider its limits.
-My servos could only rotate in integer quantities making it a critical weakpoint in tracking accuracy and no doubt something I seek to improve in further iterations of this project.
+The goal of this project was to design and program a robotic arm with rotational joints that could be controlled in the direction of an arbitrary vector in ℝ³,
+rather than through direct joint angle commands. This framing shifts the control problem from joint space to task space and requires the use of kinematics, Jacobians,
+and feedback control.
+
+I pursued this project to reinforce and integrate concepts from multivariable calculus, linear algebra, statics, and introductory C programming, all of which I had
+completed in the preceding semester. Rather than treating these topics independently, the intent was to apply them to a single, constrained physical system.
+
+The system was intentionally limited to an Arduino Uno, two 9g hobby servos, and a single stepper motor. This configuration represents the minimum number of joints 
+required to span a three-dimensional workspace while avoiding redundancy and the need for null-space optimization. These constraints simplified the kinematic structure 
+while still allowing meaningful exploration of inverse kinematics and singularity behavior.
+
+Hardware limitations significantly influenced the control strategy. The Arduino’s limited computational resources imposed practical constraints on numerical precision 
+and algorithmic complexity, while the servos’ integer-degree position resolution introduced quantization error that directly affected end-effector tracking accuracy. 
+These limitations highlighted the tradeoffs between theoretical control design and embedded implementation and informed several design decisions discussed later.
 </p>
 <h2>System Architecture Overview</h2>
 <p>
