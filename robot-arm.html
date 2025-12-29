@@ -69,9 +69,11 @@ logic without requiring the physical hardware to be connected.
 </p>
 <h2>Mechanical Design</h2>
 <p>
-  My robotic arm assembly consisted of 3 simple pieces. The base was built with 3 legs to ensure stability and measurements to ensure the stepper motor could feed through it. The two links were designed largely in tandem and begun with a length of 200mm
-  this was almost immediately shortened dramatically to 80mm due to torque constraints. Link 1 was designed to fit on top of a servo with a servo horn already attached, link 1 also features a bracket designed to house another servo. link 2 was derived from 1,
-  differing in its end where a pointer sits to accurately reflect where the robot thinks the end effector is.
+The robotic arm consists of three primary mechanical components: a fixed base and two serially connected links, forming a three-degree-of-freedom manipulator.
+The base was designed with three supporting legs to ensure stability and includes a central cutout to accommodate the stepper motor shaft. The initial link length
+was set to 200 mm but was reduced to approximately 80 mm after preliminary testing revealed torque limitations in the actuators. Link 1 mounts directly to a servo horn
+and includes an integrated bracket to house the second servo, enabling rotational motion between the two links. Link 2 was derived from the first link’s geometry but 
+modified at the distal end to include a pointer used for visually verifying the estimated end-effector position.
 </p>
 
   
