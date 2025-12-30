@@ -129,9 +129,29 @@ modified at the distal end to include a pointer used for visually verifying the 
   trigonometric functions, the former being critical for calculating magnitudes and the latter being necessary for computing the kinematics. This robot also uses BasicLinearAlgebra.h, allowing for matrices
   to be a data type, this made it more convenient to deal with matrix operations. All of the libraries utilized could have been worked around but would have tilted the focus of the project into a different
   direction.
-
 </p>
+<h2>Challenges and Failure modes</h2>
+<p>
+  Beginning with mechanical challenges, Working with 3d printed parts made exactly for specific electronic parts forced me to think in terms of manufacturing. Designing brackets, screw holes, and other geometry built to exact specifications
+  required more quality assurance work than previously expected. Each part that integrated an electronic must be created with extreme precision and care for the dimensions of the electronic part. Calipers and rulers were a requirement for cading.
+  Wire management is also a major challenge. Considering a robot built to be controllable in 3 dimensional space, wiring must not become an issue. The design of the robot does not yet incorporate proper wire management. Future iterations of this project
+  would include a larger base assembly that could house the entire arduino and wiring to avoid the issue of tangling wires.
+  Mathematically, it was challenging to integrate math into software. Most problems had to be solved numerically, most notably in the PID controls and singularity detection. 
+</p>
+<h2>Future Improvements</h2>
+<p>
+  More accurate actuators are the most necessary improvement. Servos capable of turning to more precise angles would tremendously improve line tracking capabilities. I would also like to completely redesign the mechanical structure.
+  With stronger servos a larger and more professional looking arm could be constructed which could allow for better wire management. As opposed to the current skeletal arm design, this new design could include an outside cover to hide wiring and house all
+  electronic components inside the base along. This would also improve tracking capabilities by not making avoiding wires an issue. Future iterations of this arm will include higher degrees of freedom. Redundancy could theoretically improve tracking
+  capabilities while also unlocking a new mathematical challenge in nullspace optimization. I would consider also changing microcontrollers, the arduino uno offers rapid prototyping capabilities but it far less computationaly robust and larger than an ESP32.
+  An ESP32 would allow more mathematical accuracy and provide new challenges in the form of wireless control with bluetooth, something arduino is not capable of.
+</p>
+<h2>Skills Demonstrated</h2>
+<p>
+
+
   
+</p>  
 <h2>Demo Video</h2>
 <video width="640" controls>
   <source src="assets/videos/robot-demo.mp4" type="video/mp4">
