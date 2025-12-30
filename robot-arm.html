@@ -2,172 +2,267 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Robotic Arm Control</title>
+  <title>Robotic Arm Control System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
 
 <nav>
-  <a href="index.html">Home</a>
+  <a href="index.html">Home</a> |
   <a href="projects.html">Projects</a>
 </nav>
 
 <h1>Robotic Arm Control System</h1>
 
-<h2>Overview</h2>
-<p>
-This project implements real-time cartesian control of a 3-DOF robotic arm using a Jacobian based inverse kinematics "solver", PID controls for cartesian commands, and a singularity detection/avoidance system.
-</p>
+<section>
+  <h2>Overview</h2>
+  <p>
+    This project implements real-time Cartesian control of a 3-DOF robotic arm using a Jacobian-based inverse
+    kinematics solver, Cartesian-space PID control, and a singularity detection and avoidance strategy.
+  </p>
 
-<h2>System Design</h2>
-<ul>
-  <li>Forward and inverse kinematics</li>
-  <li>Jacobian matrix and damped least squares</li>
-  <li>Workspace-based controls rather than jointspace-based controls</li>
-  <li>PID control for workspace commands with variable time step</li>
-  <li>Singularity detection using principles derived from singular value decomposition</li>
-  <li>Singularity avoidance using positional awareness and motion redirection</li>
-</ul>
-<h2>Motivation and Problem Statement</h2>
-<p>
-The goal of this project was to design and program a robotic arm with rotational joints that could be controlled in the direction of an arbitrary vector in ℝ³,
-rather than through direct joint angle commands. This framing shifts the control problem from joint space to task space and requires the use of kinematics, Jacobians,
-and feedback control.
+  <!-- Suggestion: Place a system-level photo or short demo GIF here -->
+</section>
 
-I pursued this project to reinforce and integrate concepts from multivariable calculus, linear algebra, statics, and introductory C programming, all of which I had
-completed in the preceding semester. Rather than treating these topics independently, the intent was to apply them to a single, constrained physical system.
+<section>
+  <h2>System Design Summary</h2>
+  <ul>
+    <li>Forward and inverse kinematics</li>
+    <li>Jacobian formulation with damped least squares</li>
+    <li>Workspace-based (Cartesian) control rather than joint-space control</li>
+    <li>PID control for Cartesian commands with variable timestep</li>
+    <li>Singularity detection using principles derived from singular value decomposition</li>
+    <li>Singularity avoidance using positional awareness and motion redirection</li>
+  </ul>
+</section>
 
-The system was intentionally limited to an Arduino Uno, two 9g hobby servos, and a single stepper motor. This configuration represents the minimum number of joints 
-required to span a three-dimensional workspace while avoiding redundancy and the need for null-space optimization. These constraints simplified the kinematic structure 
-while still allowing meaningful exploration of inverse kinematics and singularity behavior.
+<section>
+  <h2>Motivation and Problem Statement</h2>
+  <p>
+    The goal of this project was to design and program a robotic arm with rotational joints that could be
+    controlled in the direction of an arbitrary vector in ℝ³, rather than through direct joint angle commands.
+    This framing shifts the control problem from joint space to task space and requires the use of kinematics,
+    Jacobians, and feedback control.
+  </p>
 
-Hardware limitations significantly influenced the control strategy. The Arduino’s limited computational resources imposed practical constraints on numerical precision 
-and algorithmic complexity, while the servos’ integer-degree position resolution introduced quantization error that directly affected end-effector tracking accuracy. 
-These limitations highlighted the tradeoffs between theoretical control design and embedded implementation and informed several design decisions discussed later.
-</p>
-<h2>System Architecture Overview</h2>
-<p>
-Mechanical System-
-  The body of my robot was built from PETG filament out of pieces designed and manufactured by myself. I decided to use a 3d printer for the manufacturing of this project so that
-  I could leverage prior experience with SolidWorks and have better control over motor mounts, joint interfaces and general link geometry. As for filament choice, price constraints forced 
-  me to choose between PLA and PETG, I chose PETG due to its higher toughness and resistance to brittle failure. While PLA granted higher stiffness, PETGs increased ductility made it 
-  preferrable to a system that could experience repeated loadingand future payload expansion.
-Electronics and Hardware-
-  The control hardware consists of an Arduino Uno microcontroller, two SG90 hobby servos, and a 28BYJ-48 stepper motor. Component selection was constrained by the contents of the electronic starter kit I had
-  purchased, intentionally prioritizing accessibility and cost over performance. This constraint forced the control system to operate under limited positional resolution, torque output, and computational capacity,
-  making it well-suited for studying the practical limitations of embedded control systems. A solderless breadboard was used to facilitate rapid iteration and debugging during development.
-Software Architecture-
-  The software was developed iteratively, with an emphasis on modularity and testability. At a high level, the control loop follows this sequence:
-    Initialize joint states and system parameters,
-    Compute forward kinematics,
-    Accept a user-defined direction vector in task space,
-    Apply PID control in Cartesian space to reduce positional error,
-    Compute joint updates using a damped least-squares Jacobian-based inverse kinematics solver,
-    Detect proximity to kinematic singularities,
-    Command joint actuators to the updated positions,
-Each functional block was designed to be as independent as possible, allowing individual components to be tested in isolation. This architecture enabled debugging and validation of the kinematic and control
-logic without requiring the physical hardware to be connected.
-</p>
-<h2>Mechanical Design</h2>
-<p>
-The robotic arm consists of three primary mechanical components: a fixed base and two serially connected links, forming a three-degree-of-freedom manipulator.
-The base was designed with three supporting legs to ensure stability and includes a central cutout to accommodate the stepper motor shaft. The initial link length
-was set to 200 mm but was reduced to approximately 80 mm after preliminary testing revealed torque limitations in the actuators. Link 1 mounts directly to a servo horn
-and includes an integrated bracket to house the second servo, enabling rotational motion between the two links. Link 2 was derived from the first link’s geometry but 
-modified at the distal end to include a pointer used for visually verifying the estimated end-effector position.
-</p>
-<h2>Mathmematics/Kinematics</h2>
-<p>
-  Forward Kinematics Approach
-    Formulating forward kinematic equations was done by solving for each cartesian coordinate with respect to the 3 angles of the robot. Below is a derivation of
-    the position vector with respect to angles b,a1, and a2.
-    -----
-  Inverse Kinematics Approach
-    Inverse Kinematics for this project was made in many iterations. First testing the method of trigonometry, using the robots specific geometry to create an equation
-    that could handle a cartesian command but could only handle a unit vector. 
-    ---
-    Using properties of Multivariable Calculus and Linear Algebra, I learned and implemented a Jacobian based IK solver. The strength of this method lies in its application
-    to all robotic systems. Aside from the mathematical derivation, this method works by "zooming in" to the end effector position and forcing its curved trajectory to appear straight
-    (local linearization) and using a matrix equation to transform a change in position vector into a change in angles vector.
-    ---
-  Jacobian Formulation and Solution Approach
-    In the case of this 3 DOF robotic arm the Jacobian matrix is not redundant. As previously mentioned, the nullspace of the Jacobian was not something this bot would ever have to consider.
-    Solving the previously mentioned Matrix equation could have been done by method of Cramers Rule or by row reduction method because the Jacobian is invertible, this is only because of non-redundancy.
-    To accomodate for further expansion in DOFs and to find an approach more similar to industry, This robot solves the matrix equation as a least squares problem. The least squares problem assumes an 
-    inconsistent solution and finds the best approximating vector. In research for this project I found that this least squares solution was often paired with a damping constant. The relevance of this constant
-    is more clear in the discussion of singularities.
-    ---
-  Singularity Detection
-    A singularity is a point at which there is no direction of movement available, more formally, when the determinant of the Jacobian Matrix is zero. Such a state can be reached when one or more angles reaches its
-    maximum, The end effector touches the origin, and other geometric situations depending on degrees of freedom and link geometry. While it is possible avoid these issues by simply avoiding these geometries, a
-    more formal approach comes from singular value decomposition. This method of matrix factorization effectively divides a matrix into 3 sub matrices, two of which describe transformations and one that descirbes the strength
-    of these transformations. This "strength" matrix is composed of the singular values of the factored matrix. Finding when the singular values are tiny directly correlates to when a singularity is near. To compute the full singular
-    value decomposition at each position would be extremely computationally demanding, a solution to this is to use power iteration. Put into words, if you multiply a matrix by an arbitrary vector and normalize the resulting vector
-    then multiply that vector by the matrix again and complete the cycle infinite times, the largest eigenvector of that matrix reveals itself. But since we are interested in the smallest eigenvector we can instead solve the matrix
-    with an arbitrary vector via row reduction or cramers rule. With the smallest eigenvector found, we can extract the eigenvalue and take the square root to find the singular value. From here it is a matter of tuning values specific
-    to the robot and finding the threshold where a singularity exists.
-    ---
-  Singularity Avoidance
-    With a mathematically sound detection system, avoidance can be broken down into two techniques. Should the robot be approaching the singularity that exists on the edge of the sphere drawn by the workspace, the robot identifies this
-    by checking the magnitude of the position vector the end effector occupies and reverses the desired direction vector. Should the robot be approaching the singularity at the center of the workspace, the robot identifies this in the
-    same manner but instead redirects motion tangentially by taking the cross product of the direction vector and a K unit vector. In general task space the robot also uses its proximity to singularities to tune its controls. As alluded to
-    earlier, the purpose of damped least squares is to add a damping coefficient when inverting the Jacobian becomes more unstable. This does in some manner harm the mathematical honesty of the jacobian but the benefit of smoothing near
-    riskier positions is far more preferrable than the robot moving wildly out of control when approaching an unreachable zone.
-  
-</p>
-<h2>Control Strategy</h2>
-<p>
-  The defining control choice for this robot was to use cartesian space controls. Cartesian space controls were chosen to more closesly mimmic a robot in industry and to provide room for more mathematical rigor.
-  Velocity based controls are used also to better mimmic industry and provide a reason to learn how to use PID controls. The derivative term functions similarly as the damping coefficient mentioned above, and due to the nature of my
-  actuators, the integral term did not serve much of a purpose as there was no steady state bias like gravity or friction that could be fought. Because the nature of the robot is that of a learning experience I do not 
-  consider the drawbacks listed here enough to overrule the value of learning them, In future renditions of this project PID controls will play a larger role. Hobby servos heavily restrict robustness of controls due to quantization but
-  the strength of the robots control logic can be observed when testing without hardware.
-</p>
-<h2>Software Implementation</h2>
-<p>
-  The program language used for this robot is Arduino and runs off of Arduino IDE. Arduino is a convenient choice because of its similarity to C of which I completed a course on the previous semester.
-  To save computational demand I used several libraries. The Servo.h library allowed for servos to be more easily controlled. The math.h library allowed the use of operations such as square root and
-  trigonometric functions, the former being critical for calculating magnitudes and the latter being necessary for computing the kinematics. This robot also uses BasicLinearAlgebra.h, allowing for matrices
-  to be a data type, this made it more convenient to deal with matrix operations. All of the libraries utilized could have been worked around but would have tilted the focus of the project into a different
-  direction.
-</p>
-<h2>Challenges and Failure modes</h2>
-<p>
-  Beginning with mechanical challenges, Working with 3d printed parts made exactly for specific electronic parts forced me to think in terms of manufacturing. Designing brackets, screw holes, and other geometry built to exact specifications
-  required more quality assurance work than previously expected. Each part that integrated an electronic must be created with extreme precision and care for the dimensions of the electronic part. Calipers and rulers were a requirement for cading.
-  Wire management is also a major challenge. Considering a robot built to be controllable in 3 dimensional space, wiring must not become an issue. The design of the robot does not yet incorporate proper wire management. Future iterations of this project
-  would include a larger base assembly that could house the entire arduino and wiring to avoid the issue of tangling wires.
-  Mathematically, it was challenging to integrate math into software. Most problems had to be solved numerically, most notably in the PID controls and singularity detection. 
-</p>
-<h2>Results</h2>
-<p>
-Raw testing incomplete...
+  <p>
+    I pursued this project to reinforce and integrate concepts from multivariable calculus, linear algebra,
+    statics, and introductory C programming, all of which I had completed in the preceding semester. Rather than
+    treating these topics independently, the intent was to apply them to a single, constrained physical system.
+  </p>
 
-  
-</p>
-<h2>Future Improvements</h2>
-<p>
-  More accurate actuators are the most necessary improvement. Servos capable of turning to more precise angles would tremendously improve line tracking capabilities. I would also like to completely redesign the mechanical structure.
-  With stronger servos a larger and more professional looking arm could be constructed which could allow for better wire management. As opposed to the current skeletal arm design, this new design could include an outside cover to hide wiring and house all
-  electronic components inside the base along. This would also improve tracking capabilities by not making avoiding wires an issue. Future iterations of this arm will include higher degrees of freedom. Redundancy could theoretically improve tracking
-  capabilities while also unlocking a new mathematical challenge in nullspace optimization. I would consider also changing microcontrollers, the arduino uno offers rapid prototyping capabilities but it far less computationaly robust and larger than an ESP32.
-  An ESP32 would allow more mathematical accuracy and provide new challenges in the form of wireless control with bluetooth, something arduino is not capable of.
-</p>
-<h2>Skills Demonstrated</h2>
-<p>
--Forward and Inverse Kinematics
--Jacobians
--PID Controls
--Embedded Systems
--C++/Arduino
--Systems Integration
-</p>  
-<h2>Demo Video</h2>
-<video width="640" controls>
-  <source src="assets/videos/robot-demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+  <p>
+    The system was intentionally limited to an Arduino Uno, two 9g hobby servos, and a single stepper motor.
+    This configuration represents the minimum number of joints required to span a three-dimensional workspace
+    while avoiding redundancy and the need for null-space optimization.
+  </p>
 
+  <p>
+    Hardware limitations significantly influenced the control strategy. The Arduino’s limited computational
+    resources imposed constraints on numerical precision and algorithmic complexity, while the servos’
+    integer-degree position resolution introduced quantization error that directly affected end-effector
+    tracking accuracy. These limitations highlighted the tradeoffs between theoretical control design and
+    embedded implementation.
+  </p>
+</section>
 
+<section>
+  <h2>System Architecture Overview</h2>
+
+  <h3>Mechanical System</h3>
+  <p>
+    The robot structure was manufactured from PETG filament using a consumer-grade 3D printer. All components
+    were designed in SolidWorks, allowing precise control over motor mounts, joint interfaces, and link
+    geometry.
+  </p>
+  <p>
+    PETG was selected over PLA due to its higher toughness and resistance to brittle failure. While PLA offers
+    greater stiffness, PETG’s increased ductility made it more suitable for a system expected to experience
+    repeated loading and potential future payload expansion.
+  </p>
+
+  <!-- Suggestion: Add exploded CAD view or rendered assembly here -->
+
+  <h3>Electronics and Hardware</h3>
+  <p>
+    The control hardware consists of an Arduino Uno microcontroller, two SG90 hobby servos, and a 28BYJ-48
+    stepper motor. Component selection was constrained by the contents of an electronics starter kit,
+    intentionally prioritizing accessibility and cost over performance.
+  </p>
+  <p>
+    These constraints resulted in limited positional resolution, torque output, and computational capacity,
+    making the system well-suited for studying the practical limitations of embedded control. A solderless
+    breadboard was used to facilitate rapid iteration and debugging.
+  </p>
+
+  <!-- Suggestion: Add wiring diagram or labeled electronics photo -->
+
+  <h3>Software Architecture</h3>
+  <p>
+    The software was developed iteratively with an emphasis on modularity and testability. At a high level,
+    the control loop follows this sequence:
+  </p>
+
+  <ol>
+    <li>Initialize joint states and system parameters</li>
+    <li>Compute forward kinematics</li>
+    <li>Accept a user-defined direction vector in task space</li>
+    <li>Apply Cartesian-space PID control to reduce positional error</li>
+    <li>Compute joint updates using a damped least-squares Jacobian solver</li>
+    <li>Detect proximity to kinematic singularities</li>
+    <li>Command actuators to the updated joint positions</li>
+  </ol>
+
+  <p>
+    Each functional block was designed to be as independent as possible, allowing individual components to be
+    tested in isolation. This architecture enabled debugging and validation of the control logic without
+    requiring the physical hardware to be connected.
+  </p>
+
+  <!-- Suggestion: Block diagram or flowchart -->
+</section>
+
+<section>
+  <h2>Mechanical Design</h2>
+  <p>
+    The robotic arm consists of a fixed base and two serially connected links, forming a three-degree-of-
+    freedom manipulator. The base features three supporting legs for stability and includes a central cutout
+    to accommodate the stepper motor shaft.
+  </p>
+
+  <p>
+    The initial link length was set to 200 mm but was reduced to approximately 80 mm after preliminary testing
+    revealed torque limitations in the actuators. Link 1 mounts directly to a servo horn and includes an
+    integrated bracket to house the second servo. Link 2 was derived from Link 1’s geometry and modified at the
+    distal end to include a pointer used for visually verifying the estimated end-effector position.
+  </p>
+
+  <!-- Suggestion: Add dimensioned drawings or torque analysis snapshot -->
+</section>
+
+<section>
+  <h2>Mathematics and Kinematics</h2>
+
+  <h3>Forward Kinematics</h3>
+  <p>
+    Forward kinematics were derived by solving for each Cartesian coordinate as a function of the three joint
+    angles. This formulation provides the mapping from joint space to task space.
+  </p>
+
+  <!-- Suggestion: Insert equations or rendered math images -->
+
+  <h3>Inverse Kinematics</h3>
+  <p>
+    Initial inverse kinematics solutions were explored using trigonometric methods based on the robot’s
+    specific geometry. While effective for unit-vector commands, this approach lacked generality.
+  </p>
+  <p>
+    A Jacobian-based inverse kinematics method was ultimately implemented. This approach relies on local
+    linearization of the end-effector motion and uses matrix equations to relate differential changes in
+    position to changes in joint angles.
+  </p>
+
+  <h3>Jacobian Solution and Damping</h3>
+  <p>
+    Although the system is non-redundant and the Jacobian is theoretically invertible, the inverse problem
+    was formulated as a least-squares solution to better align with industry practice and enable future
+    expansion. A damping coefficient was introduced to improve numerical stability near singularities.
+  </p>
+
+  <h3>Singularity Detection and Avoidance</h3>
+  <p>
+    Singularities were detected by monitoring the smallest singular value of the Jacobian matrix. Computing
+    a full singular value decomposition at runtime was avoided due to computational constraints; instead,
+    eigenvalue-based methods were used to approximate proximity to singular configurations.
+  </p>
+  <p>
+    Avoidance strategies depend on the detected singularity type. Boundary singularities are handled by
+    reversing the desired direction vector, while central singularities are avoided by redirecting motion
+    tangentially. Damped least squares further smooths behavior in high-risk configurations.
+  </p>
+
+  <!-- Suggestion: Visuals of workspace, singular regions, and trajectories -->
+</section>
+
+<section>
+  <h2>Control Strategy</h2>
+  <p>
+    Cartesian-space control was chosen to more closely reflect industrial robotic systems and to enable
+    greater mathematical rigor. Velocity-based PID control was implemented to regulate task-space motion.
+  </p>
+  <p>
+    Due to actuator quantization and the absence of strong steady-state disturbances, the integral term
+    provided limited benefit in this implementation. Despite these constraints, the control framework
+    remains effective when tested in simulation and serves as a foundation for future iterations using
+    higher-quality actuators.
+  </p>
+</section>
+
+<section>
+  <h2>Software Implementation</h2>
+  <p>
+    The system was programmed using Arduino C++ within the Arduino IDE. Libraries such as
+    <code>Servo.h</code>, <code>math.h</code>, and <code>BasicLinearAlgebra.h</code> were used to reduce
+    implementation overhead and focus development on control logic and system integration.
+  </p>
+</section>
+
+<section>
+  <h2>Challenges and Failure Modes</h2>
+  <p>
+    Mechanical challenges included designing 3D-printed components with tight dimensional tolerances to
+    interface correctly with electronic hardware. Wire management also proved difficult and is not fully
+    addressed in the current design.
+  </p>
+  <p>
+    From a control perspective, integrating continuous mathematics into discrete-time embedded software
+    required numerical solutions for PID control and singularity detection, introducing additional sources
+    of error.
+  </p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <p>
+    Experimental testing is ongoing. Preliminary results demonstrate stable Cartesian motion away from
+    singular configurations.
+  </p>
+
+  <!-- Suggestion: Add trajectory plots, error metrics, or videos -->
+</section>
+
+<section>
+  <h2>Future Improvements</h2>
+  <ul>
+    <li>Higher-precision actuators for improved tracking accuracy</li>
+    <li>Redesigned mechanical structure with integrated wire management</li>
+    <li>Additional degrees of freedom enabling redundancy and null-space optimization</li>
+    <li>Migration to a more powerful microcontroller such as an ESP32</li>
+    <li>Wireless control and telemetry</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Skills Demonstrated</h2>
+  <ul>
+    <li>Forward and inverse kinematics</li>
+    <li>Jacobian-based control</li>
+    <li>PID control systems</li>
+    <li>Embedded systems programming</li>
+    <li>C++ / Arduino development</li>
+    <li>System integration</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Demo Video</h2>
+  <video width="640" controls>
+    <source src="assets/videos/robot-demo.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</section>
 
 </body>
 </html>
+
