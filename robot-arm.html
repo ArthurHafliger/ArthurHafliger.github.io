@@ -171,6 +171,22 @@
     linearization of the end-effector motion and uses matrix equations to relate differential changes in
     position to changes in joint angles.
   </p>
+   <figure>
+  <img src="imageJ1.jpg"
+       alt="Derivation of the Jacobian"
+       width="650">
+  <figcaption>
+    Hand-derived Jacobian relating joint velocities to Cartesian end-effector velocity.
+  </figcaption>
+</figure>
+   <figure>
+  <img src="imageJ2.jpg"
+       alt="Derivation of the Jacobian"
+       width="650">
+  <figcaption>
+    simplification of the above, relating change in position to change in angles.
+  </figcaption>
+</figure>
 
   <h3>Jacobian Solution and Damping</h3>
   <p>
@@ -178,13 +194,40 @@
     was formulated as a least-squares solution to better align with industry practice and enable future
     expansion. A damping coefficient was introduced to improve numerical stability near singularities.
   </p>
+ <figure>
+  <img src="imageLeastSquares.jpg"
+       alt="Solving the matrix equation derived above as a least squares equation"
+       width="650">
+  <figcaption>
+    Hand-derived Least squares solution for the jacobian matrix equation.
+  </figcaption>
+</figure>
 
+  <figure>
+  <img src="imageDamp.jpg"
+       alt="Display of Damped least squares"
+       width="650">
+  <figcaption>
+    The added damping coefficient ensures the eigenvalues of J^T J remain positive. Without this coefficient, Matrix inversion
+    becomes numerically unstable near singular regions.
+  </figcaption>
+</figure> 
+  
   <h3>Singularity Detection and Avoidance</h3>
   <p>
     Singularities were detected by monitoring the smallest singular value of the Jacobian matrix. Computing
     a full singular value decomposition at runtime was avoided due to computational constraints; instead,
     eigenvalue-based methods were used to approximate proximity to singular configurations.
   </p>
+   <figure>
+  <img src="imagePowerIteration.jpg"
+       alt="Derivation of least singular value detection"
+       width="650">
+  <figcaption>
+    Hand-derived explanation of how the largest eigenvector of a matrix can be found. to find the smallest Eigenvector and therefore smallest singular
+    value it follows from this explanation that solving the augmented matrix [A,w2] and repeating the process would yield such a result.
+  </figcaption>
+</figure>
   <p>
     Avoidance strategies depend on the detected singularity type. Boundary singularities are handled by
     reversing the desired direction vector, while central singularities are avoided by redirecting motion
