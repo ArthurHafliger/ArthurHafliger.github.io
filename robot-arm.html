@@ -264,10 +264,27 @@
 
 <section>
   <h2>Control Strategy</h2>
+    <h3>Intial Method</h3>
   <p>
-    Cartesian-space control was chosen to more closely reflect industrial robotic systems and to enable
-    greater mathematical rigor. Velocity-based PID control was implemented to regulate task-space motion.
+    Positional cartesian controls paired with an error correction system was the first major control method. The method operates by taking in a
+    cartesian position command, running inverse kinematics to move the bot to said position, then the bot compares its current position to what the commanded
+    position was using vector projection and then runs inverse kinematics again this time in the direction of the error vector. While boasting a high accuracy, 
+    this method was ultimately scrapped because the error vector movement was victim to the same mechanical issues as the initial movement vector, leading to unavoidable drift.
+    This method also demanded computing inverse kinematics twice in one direction command, something extremely computationally taxing which pushed the arduino to its limit.
   </p>
+    <h3>Current Method</h3>
+  <p>
+   Velocity-based cartesian controls utilize PID closed loop controls to "push and pull" the robot to its desired destination. This method operates by taking in a cartesian velocity
+    command and converting it to a target position by multiplying said command by the time it took to run the command and adding the result to the previous target velocity. This target position
+    is compared to the actual position of the bot and movement begins by correcting this error with a proportional, integral, and derivative term. This PID loop then computes the velocity to best
+    correct the positonal error and passes the correction into inverse kinematics where movement begins. The motivation for this control scheme came from my interest in learning more about PID loops
+    and desire to mimmic what would be used in industry or more complex designs. PID control offers natural damping and adjustments to working conditions, my electronics still limit the true realization
+    of this but future modifications will notice. A difficulty in using this method properly was tracking the change in time between commands. Because the program does not know how long the next input 
+    from the user will take the time had to be computed by taking the time at the beginning of the control loop and comparing it to the time at the beginning of the previous run of the loop. This 
+    method also had the added challenge of tuning the weights of each term in PID, this meant closely paying attention to the bot until controls didnt feel too sluggish but also not too unpredictable.
+    
+  </p>
+  
   <p>
     Due to actuator quantization and the absence of strong steady-state disturbances, the integral term
     provided limited benefit in this implementation. Despite these constraints, the control framework
