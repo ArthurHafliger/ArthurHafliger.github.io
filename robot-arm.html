@@ -70,24 +70,70 @@
 <section>
   <h2>System Architecture Overview</h2>
 
-  <h3>Mechanical System</h3>
-  <p>
-    The robot structure was manufactured from PETG filament using a consumer-grade 3D printer. All components
-    were designed in SolidWorks, allowing precise control over motor mounts, joint interfaces, and link
-    geometry.
+  <section>
+  <h2>Mechanical Design and Power Transmission</h2>
 
-    The base assembly is modeled after a bearing. The outer race integrates a Stepper motor mount and slot for a bevel gear and stability legs.
-    The inner race has a built in bevel gear and an integrated servo holder. Between the inner and outer race a retainer holds up to 6 12mm diameter ball bearings.
-    The stepper motor drives a 1 to 1 bevel gear train to convert rotational motion to the central shaft. The benefit of using bevel gears to transfer rotational motion
-    is that said gears can be placed at a 90 degree angle to one another allowing for the motor to mount on the side of the robot rather than directly underneath.
-    The base was modeled to be a large bearing to allow rotation in the central shaft but also to invite the added challenge of learning how to design and
-    manufacture a 3d printed bearing.
-  </p>
+  <h3>Design Goals and Constraints</h3>
   <p>
-    PETG was selected over PLA due to its higher toughness and resistance to brittle failure. While PLA offers
-    greater stiffness, PETG’s increased ductility made it more suitable for a system expected to experience
-    repeated loading and potential future payload expansion.
+    The mechanical design was driven by three primary constraints: limited actuator torque,
+    3D-printable geometry, and the need for repeatable rotational motion in all three degrees
+    of freedom. All components were designed and manufactured in-house using PETG filament,
+    with an emphasis on modularity and ease of iteration.
   </p>
+
+  <h3>Base Rotation and Drive System</h3>
+  <p>
+    The base of the robot was redesigned to function as a bearing-driven rotating platform.
+    A stepper motor mounted in the stationary base drives a bevel gear, which meshes with a
+    second bevel gear rigidly attached to the center race of the rotating base. This configuration
+    allows the upper structure of the robot to rotate independently while maintaining axial
+    alignment and load support.
+  </p>
+
+  <p>
+    This design separates load-bearing and torque transmission functions: the bearing geometry
+    supports axial and radial loads, while the bevel gear pair transmits rotational motion from
+    the stepper motor. This approach improves rotational stability compared to direct shaft
+    mounting and better reflects drivetrain architectures used in industrial rotary joints.
+  </p>
+
+  <!-- Suggestion: Include cross-sectional CAD or annotated photo of base assembly -->
+
+  <h3>Link Geometry and Joint Layout</h3>
+  <p>
+    The manipulator consists of two serially connected links mounted above the rotating base,
+    forming a three-degree-of-freedom arm. Initial link lengths of 200 mm were reduced to
+    approximately 80 mm after testing revealed actuator limitations.
+  </p>
+
+  <p>
+    The first link mounts directly to a servo horn and includes an integrated bracket for the
+    second servo. The second link was derived from the same geometry and modified at the distal
+    end to include a pointer for visually validating the estimated end-effector position.
+  </p>
+
+  <h3>Materials and Manufacturing</h3>
+  <p>
+    All structural components were manufactured from PETG using a consumer-grade 3D printer.
+    PETG was selected over PLA due to its increased toughness and resistance to brittle failure,
+    making it more suitable for repeated loading and iterative redesign.
+  </p>
+
+  <p>
+    Designing components to interface with off-the-shelf electronics required careful
+    consideration of tolerances, fastener placement, and assembly order. Calipers were used
+    extensively to validate critical dimensions of electronics prior to printing.
+  </p>
+
+  <h3>Mechanical Limitations</h3>
+  <p>
+    The primary mechanical limitations of the system stem from actuator torque constraints,
+    backlash in 3D-printed gear interfaces, and the absence of integrated wire management.
+    These factors influenced both achievable workspace and control performance and inform
+    several of the proposed future improvements.
+  </p>
+</section>
+
 
   <!-- Suggestion: Add exploded CAD view or rendered assembly here -->
 
@@ -128,24 +174,6 @@
   </p>
 
   <!-- Suggestion: Block diagram or flowchart -->
-</section>
-
-<section>
-  <h2>Mechanical Design</h2>
-  <p>
-    The robotic arm consists of a fixed base and two serially connected links, forming a three-degree-of-
-    freedom manipulator. The base features three supporting legs for stability and includes a central cutout
-    to accommodate the stepper motor shaft.
-  </p>
-
-  <p>
-    The initial link length was set to 200 mm but was reduced to approximately 80 mm after preliminary testing
-    revealed torque limitations in the actuators. Link 1 mounts directly to a servo horn and includes an
-    integrated bracket to house the second servo. Link 2 was derived from Link 1’s geometry and modified at the
-    distal end to include a pointer used for visually verifying the estimated end-effector position.
-  </p>
-
-  <!-- Suggestion: Add dimensioned drawings or torque analysis snapshot -->
 </section>
 
 <section>
