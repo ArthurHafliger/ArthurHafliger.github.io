@@ -75,6 +75,13 @@
     The robot structure was manufactured from PETG filament using a consumer-grade 3D printer. All components
     were designed in SolidWorks, allowing precise control over motor mounts, joint interfaces, and link
     geometry.
+
+    The base assembly is modeled after a bearing. The outer race integrates a Stepper motor mount and slot for a bevel gear and stability legs.
+    The inner race has a built in bevel gear and an integrated servo holder. Between the inner and outer race a retainer holds up to 6 12mm diameter ball bearings.
+    The stepper motor drives a 1 to 1 bevel gear train to convert rotational motion to the central shaft. The benefit of using bevel gears to transfer rotational motion
+    is that said gears can be placed at a 90 degree angle to one another allowing for the motor to mount on the side of the robot rather than directly underneath.
+    The base was modeled to be a large bearing to allow rotation in the central shaft but also to invite the added challenge of learning how to design and
+    manufacture a 3d printed bearing.
   </p>
   <p>
     PETG was selected over PLA due to its higher toughness and resistance to brittle failure. While PLA offers
@@ -149,16 +156,6 @@
     Forward kinematics were derived by solving for each Cartesian coordinate as a function of the three joint
     angles. This formulation provides the mapping from joint space to task space.
   </p>
-
-  <figure>
-  <img src="assets/images/jacobian-derivation.jpg"
-       alt="Derivation of the Jacobian mapping joint velocities to end-effector velocity"
-       width="650">
-  <figcaption>
-    Hand-derived Jacobian relating joint velocities to Cartesian end-effector velocity.
-    This formulation is later used for the inverse kinematics solver.
-  </figcaption>
-</figure>
 
 
   <h3>Inverse Kinematics</h3>
