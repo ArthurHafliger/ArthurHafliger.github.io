@@ -184,11 +184,12 @@
   <ol>
     <li>Initialize joint states and system parameters</li>
     <li>Compute forward kinematics</li>
-    <li>Accept a user-defined direction vector in task space</li>
-    <li>Apply Cartesian-space PID control to reduce positional error</li>
-    <li>Compute joint updates using a damped least-squares Jacobian solver</li>
+    <li>Accept a user-defined velocity vector in task space</li>
+    <li>Compute Jacobian Matrix</li>
     <li>Detect proximity to kinematic singularities</li>
-    <li>Command actuators to the updated joint positions</li>
+    <li>Pass user Velocity Vector into PID controller</li>
+    <li>Use a damped least squares inverse kinematics solver to find joint angles</li>
+    <li>Pass new joint angles into actuators</li>
   </ol>
 
   <p>
