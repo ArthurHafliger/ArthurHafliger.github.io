@@ -305,16 +305,13 @@
     This method also demanded computing inverse kinematics twice in one direction command, something extremely computationally taxing which pushed the arduino to its limit.
   </p>
     <h3>Current Method</h3>
-  <p>
-   Velocity-based cartesian controls utilize PID closed loop controls to "push and pull" the robot to its desired destination. This method operates by taking in a cartesian velocity
-    command and converting it to a target position by multiplying said command by the time it took to run the command and adding the result to the previous target velocity. This target position
-    is compared to the actual position of the bot and movement begins by correcting this error with a proportional, integral, and derivative term. This PID loop then computes the velocity to best
-    correct the positonal error and passes the correction into inverse kinematics where movement begins. The motivation for this control scheme came from my interest in learning more about PID loops
-    and desire to mirror what would be used in industry or more complex designs. PID control offers natural damping and adjustments to working conditions, my electronics still limit the true realization
-    of this but future modifications will notice. A difficulty in using this method properly was tracking the change in time between commands. Because the program does not know how long the next input 
-    from the user will take the time had to be computed by taking the time at the beginning of the control loop and comparing it to the time at the beginning of the previous run of the loop. This 
-    method also had the added challenge of tuning the weights of each term in PID, this meant closely paying attention to the bot until controls didnt feel too sluggish but also not too unpredictable.
-    
+  <p> Velocity-based cartesian controls utilize PID closed loop controls to "push and pull" the robot to its desired destination. This method operates by accepting a user defined velocity vector which is then
+      passed into an inverse kinematics solver function where the jacobian matrix is initialized. The desired velocity vector is then passed into a PID controller where it is then corrected with respect to the previous
+      error. With this corrected velocity vector the change in angles vector is computed. Utilizing the same jacobian initialized before, the velocity vector is re-derived by solving for it with respect to the change in angle
+      vector which produces a residual change in position. This residual change in position is used to solve for a residual change in angles via the same damped least squares solver. The original change in angles vector
+      is combined with this residual vector to find a final change in angles vector. This method ensures that the PID controller is fully aware of the jacobian because its error is computed after the residual vectors are accounted for.
+      Previous iterations of this method placed the PID controller before the jacobian computation, which caused errors in that the PID controls would make changes without regard to positional capabilities, leading to derivative wind up and
+      major build ups of energy near singular positions. The major benefit of this method over purely cartesian commands is that the jacobian is only computed once which saves major computational space. 
   </p>
   
   <p>
