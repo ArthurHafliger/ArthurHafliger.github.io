@@ -184,7 +184,8 @@
     <figcaption>Illustration of eigenvalue-based approximation for smallest singular value.</figcaption>
   </figure>
   <p>
-    Avoidance strategies depend on the singularity type: boundary singularities reverse the desired vector, while central singularities redirect motion tangentially. Damped least squares smooths behavior in high-risk configurations.
+    Singularities are avoided by placing a limit on the boundary and central region. All new motion that would pass this limit is rejected. The PID controller responds by turning off the derivative and integral term, heavily damping kP, and setting all error to zero. This eliminates any build-up of energy
+    so that the manipulator can safely withdraw from the singular zone. 
   </p>
   <!-- Suggested: Include workspace and singularity visualization -->
 </section>
