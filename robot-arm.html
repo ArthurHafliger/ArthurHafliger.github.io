@@ -14,6 +14,10 @@
 </nav>
 
 <h1>Robotic Arm Mechanical Design and Control System</h1>
+  <p>By Arthur Hafliger</p>
+  <p>Project start: December 2025</p>
+  <p>Project completion: ongoing</p>
+  <p>Note: though the project is ongoing, all the following represents the system in its current state</p>
 
 <section>
   <h2>Overview</h2>
@@ -22,6 +26,19 @@
   </p>
   <!-- Suggested: Insert system-level photo or demo GIF here -->
 </section>
+  <section>
+  <h2>Why This Project Matters</h2>
+  <p>
+    Cartesian control and singularity management are fundamental challenges in real-world robotic systems, including industrial manipulators, collaborative robots, and medical devices. While these topics are often introduced theoretically, implementing them on embedded hardware exposes practical issues such as numerical instability, electronic restrictions, and computational limits.
+  </p>
+  <p>
+    This project demonstrates how control concepts such as Jacobian-based inverse kinematics, damped least squares, and task-space PID control can be adapted to low-cost hardware with limited precision. By explicitly addressing singularity detection, avoidance, and recovery, the system prioritizes robustness over idealized performance.
+  </p>
+  <p>
+    Beyond achieving end-effector motion, this work emphasizes system-level engineering: understanding failure modes, making design tradeoffs, and validating behavior through physical experiments.
+  </p>
+</section>
+
 
 <section>
   <h2>System Design Summary</h2>
@@ -235,6 +252,8 @@
   <h2>Future Improvements</h2>
   <ul>
     <li>Higher-precision actuators for improved tracking accuracy</li>
+    <li>Improved singularity handling</li>
+    <li>Improved gear system on base assembly for reduced backlash and inprecision</li>
     <li>Redesigned mechanical structure with integrated wire management</li>
     <li>Additional degrees of freedom enabling redundancy and null-space optimization</li>
     <li>Migration to a more powerful microcontroller, e.g., ESP32</li>
