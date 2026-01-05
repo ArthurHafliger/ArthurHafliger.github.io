@@ -198,7 +198,16 @@
   </p> 
   <figure> <img src="imagePowerIteration.jpeg" alt="Derivation of least singular value detection" width="650"> <figcaption>
     Hand-derived explanation of how the largest eigenvector of a matrix can be found. To find the smallest Eigenvector and therefore smallest singular value it follows from this explanation that solving the augmented matrix [A,w2] and repeating the process would yield such a result. 
-  </figcaption> </figure>
+  </figcaption>
+  </figure>
+  <p> 
+  Singularities were avoided by scaling the velocity input with respect to the current smallest singular value and neglecting some aspects of the PID controller when near a singular region. To avoid singularities geometrically, the system is restricted from moving into the outer region of the workspace
+  and the inner cylinder of the workspace.
+  </p>
+  <figure> <img src="image0 (2).jpeg" alt="Visual representation of workspace boundary" width="650"> <figcaption>
+    White board drawing of the workspace in the XY and ZX planes. Bottom left depicts a 3d view of the cylindrical center boundary that is also visible in the ZX plane. 
+  </figcaption>
+  </figure>
 
 <section>
 <h3>Control Strategy</h3> 
@@ -242,8 +251,38 @@
 <section>
   <h2>Results</h2>
   <p>
-    Preliminary tests show stable Cartesian motion away from singularities. Quantitative performance metrics such as RMS tracking error are under evaluation.
+    The following are several videos depicting motion in cartesian space
   </p>
+  <section>
+  <h2>X Direction</h2>
+  <video width="640" controls>
+    <source src="RobotArmX.mov" type="video/mov">
+    Depicts moving forward and reverse in the X direction, then traveling until the boundary singularity is hit to demonstrate recovery.
+  </video>
+</section>
+  <section>
+  <h2>Y Direction</h2>
+  <video width="640" controls>
+    <source src="RobotArmY.mov" type="video/mov">
+    Depicts moving forward and reverse in the Y direction, then traveling until the boundary singularity is hit to demonstrate recovery.
+  </video>
+</section>
+  <section>
+  <h2>Z Direction</h2>
+  <video width="640" controls>
+    <source src="RobotArmZ.mov" type="video/mov">
+    Depicts moving forward and reverse in the Z direction, then traveling until the boundary singularity is hit to demonstrate recovery.
+  </video>
+</section>
+  <section>
+  <h2>Cartesian Manipulation</h2>
+  <video width="640" controls>
+    <source src="RobotArmCart.mov" type="video/mov">
+    Depicts moving in all directions according to user commands. This video highlights how singularities can be accidentally hit, how PID can
+    misunderstand directional intention and carry momentum from previous directional inputs, and how PID can store energy near singular regions.
+    This video purposefully highlights the imperfections of the system and will serve as a comparison for later iterations of this project.
+  </video>
+</section>
   <!-- Suggested: Include trajectory plots, error metrics, or demo video -->
 </section>
 
