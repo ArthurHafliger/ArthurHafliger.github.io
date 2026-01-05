@@ -173,6 +173,16 @@
     <img src="image0 (1).jpeg" alt="Forward Kinematics" width="650"> 
     <figcaption> Graphical representation of robotic arm with forward kinematics shown. </figcaption>
   </figure>
+  <p>Forward Kinematics Code Snippet</p>
+<pre><code class="language-cpp">
+  c1 = cos(b); s1 = sin(b);
+  c2 = cos(a1); s2 = sin(a1);
+  c3 = cos(a2); s3 = sin(a2);
+  *xd = L2*c3*c1 + L1*c2*c1; 
+  *yd = L2*c3*s1 + L1*c2*s1;
+  *zd = L2*s3     + L1*s2;
+</code></pre>
+
   <h1>Inverse Kinematics</h1> 
   <p> 
     Initial inverse kinematics solutions were explored using trigonometric methods based on the robot’s specific geometry. While effective for unit-vector commands, this approach lacked generality.
@@ -192,6 +202,40 @@
       Matrix inversion becomes numerically unstable near singular regions. 
     </figcaption>
     </figure>
+  <p>Inverse Kinematics Code Snippet</p>
+<pre><code class="language-cpp">
+  //Jacobian row x column;
+  double J11 = -L1*sin(a1)*cos(b);
+  double J12 = -L2*sin(a2)*cos(b);
+  double J13 = -sin(b)*(L1*cos(a1)+L2*cos(a2));
+  double J21 = -L1*sin(a1)*sin(b);
+  double J22 = -L2*sin(a2)*sin(b);
+  double J23 = cos(b)*(L1*cos(a1)+L2*cos(a2));
+  double J31 = L1*cos(a1);
+  double J32 = L2*cos(a2);
+  double J33 = 0;
+
+  Jcbn = {J11, J12, J13,
+          J21, J22, J23,
+          J31, J32, J33};
+  JcbnT = {J11, J21, J31,
+           J12, J22, J32,
+           J13, J23, J33};
+  
+  Iden = {lambda*lambda, 0, 0,
+          0, lambda*lambda, 0,
+          0, 0, lambda*lambda};
+  Matrix<3,3> JtJ = JcbnT*Jcbn;
+  damp = JtJ + Iden; //Jacobian*Jacobian Transpose + Lambda^2 * Identity Matrix
+  Invdamp = Inverse(damp); 
+
+  DeltaP = getDirection(DirectionF, Position, &ErrorP, &TargetP, &iP, dt, sigmaMin);
+  Delta0 = Invdamp*JcbnT*DeltaP;  //compute change in angles required
+  Matrix<3,1> ActualDeltaP = Jcbn * Delta0; //compute what the change in position shouldve been
+  Matrix<3,1> Residual = DeltaP - ActualDeltaP; //gather residual error from DLS
+  Matrix<3,1> Delta0Correction = Invdamp * JcbnT * Residual; 
+  Delta0 = Delta0 + Delta0Correction; 
+</code></pre>
 
   <h1>Singularity Detection and Avoidance</h1> 
   <p> Singularities were detected by monitoring the smallest singular value of the Jacobian matrix. Computing a full singular value decomposition at runtime was avoided due to computational constraints; instead, eigenvalue-based methods were used to approximate proximity to singular configurations.
@@ -208,6 +252,29 @@
     White board drawing of the workspace in the XY and ZX planes. Bottom left depicts a 3d view of the cylindrical center boundary that is also visible in the ZX plane. 
   </figcaption>
   </figure>
+    <p>Singularity Detection Code Snippet</p>
+<pre><code class="language-cpp">
+  Matrix<3,3> A = Jcbn*JcbnT;
+  Matrix<3,1> w;
+  //solve Ax = w where x is any random vector
+  
+  Matrix<3,1> x = {1,1,1};
+  Matrix<3,3> IdenSmall = {0.00001, 0, 0,
+                          0, 0.00001, 0,
+                          0, 0, 0.00001};
+  // Regularization to avoid singularity
+  A = A + IdenSmall;
+  Matrix<3,3> Ai = Inverse(A);
+  for(int i = 0; i<4; i++){
+    // Solve A w = x using the inverse
+    w = Ai * x;
+    float mag = 1/sqrt(w(0,0)*w(0,0) + w(1,0)*w(1,0) + w(2,0)*w(2,0));
+    w = {w(0,0)*mag, w(1,0)*mag, w(2,0)*mag};
+    x = w;
+  }
+  Matrix<1,1> Eig = (~w)*(Inverse(A))*w;
+  float sigmaMin = sqrt(Eig(0,0));
+</code></pre>
 
 <section>
 <h3>Control Strategy</h3> 
@@ -226,7 +293,22 @@
     changes without regard to positional capabilities, leading to derivative wind up and major build ups of energy near singular positions. The major benefit of this method over purely cartesian commands is that the jacobian is only computed once which saves major computational space. </p> <p> Ultimately, a 
     velocity-based Cartesian PID controller was implemented to compute corrective task-space velocities based on positional error. While proportional control dominated performance due to actuator quantization and limited steady-state disturbances, derivative damping improved stability near singular regions. 
     Integral action provided limited benefit under current hardware constraints but remains part of the framework for future iterations. </p> </section>
+<p>PID Controller Code Snippet</p>
+<pre><code class="language-cpp">
+  float kP = 0.06;
+  float kD = 0.003;
+  float kI = 0.0001;
+  Target = *TargetP + DirectionS*(Matrix<1,1> {dt}); //integrate directionS to get units of position
 
+  }
+  Matrix<3,1> actual = Position;
+  
+  Matrix<3,1> e = Target - actual;
+  Matrix<3,1> d = (e - *ErrorP)*(Matrix<1,1> {1/dt});
+  Matrix<3,1> i = *iP + e*(Matrix<1,1> {dt});
+  
+  Matrix<3,1> u = e*(Matrix<1,1> {kP}) + d*(Matrix<1,1> {kD}) + i*(Matrix<1,1> {kI});
+</code></pre>
 <section>
   <h2>Software Implementation</h2>
   <p>
