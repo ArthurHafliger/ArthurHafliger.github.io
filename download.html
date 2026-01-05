@@ -12,9 +12,12 @@
     This page contains the full Arduino program used to control the robotic arm,
     including forward and inverse kinematics, Cartesian velocity control, and
     singularity handling.
+    This code includes a 7 button control layout, 2 for each cartesian direction and 1 that computes
+    forward kinematics and compares the end effectors current position to the established home position in the header,
+    used for tracking straight line errors and tuning PID controller.
   </p>
 
-  <a href="code/robot_arm_controller.ino" download>
+  <a href="ARM_CODE_FINAL.ino" download>
     Download Arduino Program (.ino)
   </a>
 
