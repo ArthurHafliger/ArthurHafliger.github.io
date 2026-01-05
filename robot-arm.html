@@ -24,7 +24,10 @@
   <p>
     This project demonstrates real-time Cartesian control of a 3-DOF robotic arm using a Jacobian-based inverse kinematics solver, task-space PID control, and a singularity detection and avoidance strategy. The system integrates mechanical design, electronics, and embedded control software to achieve accurate end-effector motion within a constrained workspace.
   </p>
-  <!-- Suggested: Insert system-level photo or demo GIF here -->
+  <figure>
+    <img src="RobotArmRobotArm.jpeg" alt="Isometric view of robot" width="650">
+    <figcaption>3 DOF Robot Arm.</figcaption>
+  </figure>
 </section>
   <section>
   <h2>Why This Project Matters</h2>
@@ -128,7 +131,19 @@
   <p>
     The Arduino operates at ~16 MHz, limiting real-time performance. Servos provide ~1° resolution, introducing quantization errors. A solderless breadboard facilitated rapid iteration and debugging.
   </p>
-  <!-- Suggested: Add wiring diagram or labeled photo -->
+  <p>For the purposes of additional button inputs, an Arduino Mega was used in the final iteration of this project though it is important to note that everything is fully functional on a standard Arduino Uno</p>
+  <figure>
+    <img src="image2.jpeg" alt="MicroController" width="650">
+    <figcaption>Arduino Mega clone (Elegoo Mega) used in final iteration.</figcaption>
+  </figure>
+  <figure>
+    <img src="RobotArmBreadSquare.jpeg" alt="Electronic wiring" width="650">
+    <figcaption>Top view of breadboard used to power the electronics. Connected to 5v and ground pins on the Microcontroller for power.</figcaption>
+  </figure>
+  <figure>
+    <img src="RobotArmBreadBoard.jpeg" alt="Control wiring" width="650">
+    <figcaption>Top view of breadboard used for user button inputs. All buttons connected to 3.3v and ground pins on the Microcontroller and wired through a 10k ohm resistor.</figcaption>
+  </figure>
 </section>
 
 <section>
