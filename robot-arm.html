@@ -161,10 +161,6 @@
     <li>Solve the damped least-squares inverse kinematics problem for joint updates.</li>
     <li>Send updated joint angles to actuators.</li>
   </ol>
-  <p>
-    Each module can be tested independently, enabling debugging without physical hardware.  
-    <!-- Suggested: Include flowchart showing software architecture -->
-  </p>
 </section>
 
 <section>
@@ -267,9 +263,11 @@
   <h2>Future Improvements</h2>
   <ul>
     <li>Higher-precision actuators for improved tracking accuracy</li>
+    <li>Implement motors with encoders to use PWM to better stabilize position</li>
     <li>Improved singularity handling</li>
     <li>Improved gear system on base assembly for reduced backlash and inprecision</li>
     <li>Redesigned mechanical structure with integrated wire management</li>
+    <li>Wiring soldered to PCB/custom made PCB
     <li>Additional degrees of freedom enabling redundancy and null-space optimization</li>
     <li>Migration to a more powerful microcontroller, e.g., ESP32</li>
     <li>Wireless control and remote operation</li>
