@@ -214,10 +214,6 @@ double IKnew(int L1, int L2, double a1, double a2, double b, int* stepCount, dou
   JcbnT = {J11, J21, J31,
            J12, J22, J32,
            J13, J23, J33};
-  
-  Matrix<3,1> Pi = {xi,
-                    yi,
-                    zi};
 
   
   *sigmaMin = checkSingularity(Jcbn, JcbnT);
@@ -612,11 +608,11 @@ float checkSingularity(Matrix <3,3> Jcbn, Matrix <3,3> JcbnT)
                           0, 0, 0.00001};
   // Regularization to avoid singularity
   A = A + IdenSmall;
-  A = Inverse(A);
+  Matrix<3,3> Ai = Inverse(A);
   for(int i = 0; i<4; i++){
     // Solve A w = x using the inverse
   
-    w = A * x;
+    w = Ai * x;
     float mag = 1/sqrt(w(0,0)*w(0,0) + w(1,0)*w(1,0) + w(2,0)*w(2,0));
     w = {w(0,0)*mag, w(1,0)*mag, w(2,0)*mag};
     x = w;
