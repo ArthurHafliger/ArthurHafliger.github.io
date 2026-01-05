@@ -210,20 +210,22 @@
   </figcaption> </figure>
 
 <section>
-  <h2>Control Strategy</h2>
-  <h3>Initial Method</h3>
-  <p>
-    Positional Cartesian control with error correction was initially implemented. Commands were applied, and residual errors were corrected using a second inverse kinematics computation. Although accurate, this method caused drift due to mechanical limitations and required double computation per command, pushing the Arduino to its limits.
-  </p>
-
-  <h3>Current Method</h3>
-  <p>
-    Velocity-based Cartesian control with a PID loop is now used. A user-defined velocity vector is corrected for previous error, then translated into joint-space velocities using the Jacobian. Residual position errors are converted into additional joint adjustments via damped least-squares. Combining these produces final joint commands.
-  </p>
-  <p>
-    This ensures the PID controller respects the robot’s kinematic constraints, preventing derivative wind-up near singularities. The Jacobian is computed once per loop, reducing computational load. Proportional control dominates due to actuator quantization; derivative action improves stability near singularities, and integral action is retained for future hardware upgrades.
-  </p>
-</section>
+<h2>Control Strategy</h2> 
+<h3>Intial Method</h3> 
+  <p> 
+    Positional cartesian controls paired with an error correction system was the first major control method. The method operates by taking in a cartesian position command, running inverse kinematics to move the bot to said position, then the bot compares its current position to what the commanded position
+    was using vector projection and then runs inverse kinematics again this time in the direction of the error vector. While boasting a high accuracy, this method was ultimately scrapped because the error vector movement was victim to the same mechanical issues as the initial movement vector, leading to 
+    unavoidable drift. This method also demanded computing inverse kinematics twice in one direction command, something extremely computationally taxing which pushed the arduino to its limit. 
+  </p> 
+  <h3>Current Method</h3> 
+  <p> 
+    Velocity-based cartesian controls utilize PID closed loop controls to "push and pull" the robot to its desired destination. This method operates by accepting a user defined velocity vector which is then passed into an inverse kinematics solver function where the jacobian matrix is initialized. The desired
+    velocity vector is then passed into a PID controller where it is then corrected with respect to the previous error. With this corrected velocity vector the change in angles vector is computed. Utilizing the same jacobian initialized before, the velocity vector is re-derived by solving for it with respect 
+    to the change in angle vector which produces a residual change in position. This residual change in position is used to solve for a residual change in angles via the same damped least squares solver. The original change in angles vector is combined with this residual vector to find a final change in angles 
+    vector. This method ensures that the PID controller is fully aware of the jacobian because its error is computed after the residual vectors are accounted for. Previous iterations of this method placed the PID controller before the jacobian computation, which caused errors in that the PID controls would make 
+    changes without regard to positional capabilities, leading to derivative wind up and major build ups of energy near singular positions. The major benefit of this method over purely cartesian commands is that the jacobian is only computed once which saves major computational space. </p> <p> Ultimately, a 
+    velocity-based Cartesian PID controller was implemented to compute corrective task-space velocities based on positional error. While proportional control dominated performance due to actuator quantization and limited steady-state disturbances, derivative damping improved stability near singular regions. 
+    Integral action provided limited benefit under current hardware constraints but remains part of the framework for future iterations. </p> </section>
 
 <section>
   <h2>Software Implementation</h2>
