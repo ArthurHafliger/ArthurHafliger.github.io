@@ -203,20 +203,11 @@
     <figcaption>Damping stabilizes inversion near singular configurations.</figcaption>
   </figure>
 
-  <h3>Singularity Detection and Avoidance</h3>
-  <p>
-    Singularities are detected by monitoring the smallest singular value of the Jacobian. To reduce computation, eigenvalue-based approximations were used instead of full SVD.
-  </p>
-  <figure>
-    <img src="imagePowerIteration.jpeg" alt="Eigenvalue-based singularity detection" width="650">
-    <figcaption>Illustration of eigenvalue-based approximation for smallest singular value.</figcaption>
-  </figure>
-  <p>
-    Singularities are avoided by placing a limit on the boundary and central region. All new motion that would pass this limit is rejected. The PID controller responds by turning off the derivative and integral term, heavily damping kP, and setting all error to zero. This eliminates any build-up of energy
-    so that the manipulator can safely withdraw from the singular zone. 
-  </p>
-  <!-- Suggested: Include workspace and singularity visualization -->
-</section>
+  <h3>Singularity Detection and Avoidance</h3> 
+  <p> Singularities were detected by monitoring the smallest singular value of the Jacobian matrix. Computing a full singular value decomposition at runtime was avoided due to computational constraints; instead, eigenvalue-based methods were used to approximate proximity to singular configurations.
+  </p> <figure> <img src="imagePowerIteration.jpeg" alt="Derivation of least singular value detection" width="650"> <figcaption>
+    Hand-derived explanation of how the largest eigenvector of a matrix can be found. To find the smallest Eigenvector and therefore smallest singular value it follows from this explanation that solving the augmented matrix [A,w2] and repeating the process would yield such a result. 
+  </figcaption> </figure>
 
 <section>
   <h2>Control Strategy</h2>
